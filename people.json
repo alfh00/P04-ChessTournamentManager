@@ -1,0 +1,45 @@
+{
+    "length": 7,
+    "players": [
+        {
+            "id": "RR0550",
+            "first_name": "Gwenny",
+            "last_name": "Royl"
+        },
+        {
+            "id": "NA2504",
+            "first_name": "Lacey",
+            "last_name": "Partlett"
+        },
+        {
+            "id": "VL1344",
+            "first_name": "Rudiger",
+            "last_name": "O'Doogan"
+        },
+        {
+            "id": "DN6391",
+            "first_name": "Fred",
+            "last_name": "Mosco"
+        },
+        {
+            "id": "NJ1712",
+            "first_name": "Carey",
+            "last_name": "Luigi"
+        },
+        {
+            "id": "KY1806",
+            "first_name": "Morgan",
+            "last_name": "Harris"
+        },
+        {
+            "id": "AA00002",
+            "first_name": "Ali2",
+            "last_name": "Fathallah2"
+        },
+        {
+            "id": "AA00003",
+            "first_name": "Ali3",
+            "last_name": "Fathallah3"
+        }
+    ]
+}

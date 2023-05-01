@@ -1,20 +1,11 @@
 import curses
 
-# class views:
-#     def __init__(self) -> None:
-#         pass
-
-
-#     def principal_menu(self):
-#         pass
 
 menu = {
-    "Main": {
-        "Joueur": {"Afficher les joueurs": None, "Ajouter un joueur": None, "Editer un joueur": None, "Exit": None},
-        "Tournois": {"Afficher les tournois": None, "Ajouter un tournois": None, "Paste": None},
-        "View": None,
-        "Help": None,
-    }
+    "Joueurs": {"Afficher les joueurs": None, "Ajouter un joueur": None, "Editer un joueur": None, "Retour": None},
+    "Tournois": {"Afficher les tournois": None, "Ajouter un tournois": None, "Gestion Tournois": None},
+    "Quitter": None,
+    "Help": None,
 }
 
 
@@ -22,13 +13,17 @@ class Views:
     def __init__(self, menu):
         self.menu = menu
 
+    # def select_menu(self):
+    #     if not self.menu:
+    #         self.menu = menu
+
     def print_menu(self, stdscr, selected_row):
         stdscr.clear()
         h, w = stdscr.getmaxyx()
 
-        for idx, row in enumerate(self.menu.menu_list):
+        for idx, row in enumerate(self.menu):
             x = w // 2 - len(row) // 2
-            y = h // 2 - len(self.menu_list) // 2 + idx
+            y = h // 2 - len(self.menu) // 2 + idx
 
             if idx == selected_row:
                 stdscr.attron(curses.color_pair(1))
@@ -55,7 +50,7 @@ class Views:
                 current_row -= 1
             elif key == curses.KEY_DOWN and current_row < len(self.menu) - 1:
                 current_row += 1
-            elif key == curses.KEY_ENTER or key in [10, 13]:
+            elif key == curses.KEY_ENTER:
                 stdscr.addstr(0, 0, f"Vous êtes dans {self.menu[current_row]}")
                 stdscr.refresh()
                 stdscr.getch()

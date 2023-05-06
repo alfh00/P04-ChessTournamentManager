@@ -5,7 +5,6 @@ menu = {
     "Joueurs": {"Afficher les joueurs": None, "Ajouter un joueur": None, "Editer un joueur": None, "Retour": None},
     "Tournois": {"Afficher les tournois": None, "Ajouter un tournois": None, "Gestion Tournois": None},
     "Quitter": None,
-    "Help": None,
 }
 
 
@@ -13,9 +12,12 @@ class Views:
     def __init__(self, menu):
         self.menu = menu
 
-    # def select_menu(self):
-    #     if not self.menu:
-    #         self.menu = menu
+    def select_menu(self, selected_menu):
+        for sub_menu in self.menu:
+            if sub_menu != selected_menu:
+                return self.select_menu(sub_menu)
+            else:
+                return sub_menu
 
     def print_menu(self, stdscr, selected_row):
         stdscr.clear()
@@ -42,7 +44,7 @@ class Views:
 
         self.print_menu(stdscr, current_row)
 
-        while 1:
+        while True:
             key = stdscr.getch()
             stdscr.clear()
 
@@ -50,8 +52,8 @@ class Views:
                 current_row -= 1
             elif key == curses.KEY_DOWN and current_row < len(self.menu) - 1:
                 current_row += 1
-            elif key == curses.KEY_ENTER:
-                stdscr.addstr(0, 0, f"Vous êtes dans {self.menu[current_row]}")
+            elif key == curses.KEY_ENTER or key in [10, 13]:
+                stdscr.addstr(0, 0, str(self.menu))
                 stdscr.refresh()
                 stdscr.getch()
                 if current_row == len(self.menu) - 1:

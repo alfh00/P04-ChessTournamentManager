@@ -1,13 +1,19 @@
 from datetime import datetime
+import math
 
 
 class Tournament:
-    def __init__(self, name, location, players, rounds_number=4):
+    def __init__(
+        self,
+        name,
+        location,
+        players,
+):
         self.name = name
         self.location = location
         self.start_date = datetime.now()
         self.end_date = None
-        self.rounds_number = rounds_number
+        self.num_rounds = math.ceil(math.log2(len(players) - 1))
         self.rounds_list = []
         self.players = players
         self.description = ""

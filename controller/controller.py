@@ -19,64 +19,19 @@ class Controller:
 
     def create_tournament(self, players):
         tournament_infos = self.views.get_tournament_infos()
-        name, location = tournament_infos
-        tournament = Tournament(name, location, players)
+        name, location, num_rounds = tournament_infos
+        tournament = Tournament(name, location, players, num_rounds)
         return tournament
 
     def create_rounds(self, players, num_rounds):
-        # Shuffle players randomly to avoid predictable pairing based on order
-        # random.shuffle(players)
-
-        # Initialize an undirected Graph with a node for each player
-        graph = nx.Graph()
-        graph.add_nodes_from(players)
-
-        # Keep track of player pairings that have already happened
-        previous_pairings = set()
-
-        for round_num in range(num_rounds):
-            print(f"Round {round_num + 1}:")
-
-            # Generate all possible pairings (matches), excluding previous pairings
-            possible_pairings = [
-                (p1, p2)
-                for p1, p2 in itertools.combinations(players, 2)
-                if (p1, p2) not in previous_pairings and (p2, p1) not in previous_pairings
-            ]
-
-            # Add first edge to the graph for each possible pairing between players based on score difference
-            # Add second edge: "paired" boolean as players never played
-            for player1, player2 in possible_pairings:
-                score_difference = abs(player1.score - player2.score)
-                graph.add_edge(player1, player2, weight=score_difference, paired=False)
-
-            matching = nx.max_weight_matching(graph, weight="weight", maxcardinality=True)
-            for match in matching:
-                if not graph[match[0]][match[1]]["paired"]:
-                    result = input(f"result {match[0].first_name} vs {match[1].first_name}: ")
-                    if result == "1":
-                        match[0].score += 1
-                    elif result == "0":
-                        match[1].score += 1
-                    elif result == "0.5":
-                        match[0].score += 0.5
-                        match[1].score += 0.5
-                    graph[match[0]][match[1]]["paired"] = True
-
-                    # Add player pairing to previous_pairings
-                    previous_pairings.add((match[0], match[1]))
-
-            players.sort(key=lambda x: x.score, reverse=True)
-
-            for player in players:
-                print(f"{player.first_name} score: {player.score}")
-
-            # Reset paired attribute of edges for next round
-            # for edge in graph.edges:
-            #     graph[edge[0]][edge[1]]["paired"] = False
-
-            # nx.draw_spring(graph, with_labels=True)
-            # plt.show()
+        players = players.sort(key=lambda x: x.rank, reverse=True)
+        # matrix = [[0 if col <= row else False for col in range(len(players))] for row in range(len(players))]
+        seen = []
+        for round_number in num_rounds:
+            print(f"Round {round_number} fight:")
+            mid = len(players) // 2
+            winners = players[:mid]
+            loosers = players[mid:]
 
     def create_matches(self, pairs):
         matches = []

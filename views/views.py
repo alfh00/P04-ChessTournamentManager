@@ -17,7 +17,8 @@ class Views:
     def get_tournament_infos(self):
         tounrnament_name = input("Entrez le nom du tournois: ")
         tounrnament_location = input("Où se passe-t-il: ")
-        return tounrnament_name, tounrnament_location
+        tounrnament_num_rounds = input("prédeterminer le nombre de tour: ")
+        return tounrnament_name, tounrnament_location, tounrnament_num_rounds
 
     def get_match_result(self, match):
         result = input(

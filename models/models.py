@@ -1,22 +1,22 @@
 from datetime import datetime
 import math
+import itertools
 
 
 class Tournament:
-    def __init__(
-        self,
-        name,
-        location,
-        players,
-):
+    def __init__(self, name, location, players, num_rounds=None):
         self.name = name
         self.location = location
         self.start_date = datetime.now()
         self.end_date = None
-        self.num_rounds = math.ceil(math.log2(len(players) - 1))
+        self.num_rounds = num_rounds or math.ceil(math.log2(len(players) - 1))
+        self.possible_pairing = self.generate_pairing(players)
         self.rounds_list = []
         self.players = players
         self.description = ""
+
+    def generate_pairing(self, players):
+        return list(itertools.combinations(players, 2))
 
     def __str__(self):
         return f"Tournament(Name: {self.name},\nLocation: {self.location},\nStart: {self.start_date},\nEnd: {self.end_date},\nRounds_number: {self.rounds_number},\nRounds_list{self.rounds_list},\nPlayers: {self.players},\nDescription: {self.description})"
@@ -65,3 +65,9 @@ class Match:
 
     def __repr__(self):
         return f"Match({self.player_1.first_name}, {self.player_2.first_name}, result={self.result})"
+
+
+class Menu:
+    def __init__(self, name, submenus=None):
+        self.name = name
+        self.submenus = submenus if submenus else []

@@ -30,15 +30,21 @@ class Controller:
         num_rounds = tournament.num_rounds
         rounds = []
 
-        for round_number in range(0, num_rounds):
+        for round_number in range(1, num_rounds + 1):
             round_pairs = []
-            print(f"Round {round_number+1} fight:")
-            for i, match in enumerate(range(len(players) // 2)):
+            print(f"Round {round_number} fight:")
+
+            for match in range(len(players) // 2):
                 pair = random.choice(all_pairs)
                 print("THIS IS A PAIR", pair)
                 round_pairs.append(pair)
                 all_pairs.remove(pair)
-            print("LEN ALL PAIIIIRS", len(all_pairs))
+
+                current_round = Round(
+                    round_number,
+                    round_pairs,
+                )
+                rounds.append(current_round)
 
             round_matches = self.create_matches(round_pairs)
 

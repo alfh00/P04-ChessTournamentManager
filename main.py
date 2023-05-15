@@ -6,17 +6,14 @@ program_launched = True
 
 def app():
     controller = Controller()
-    menu_controller = MenuController()
-    menu_controller.start()
+    # nav_controller = MenuController()
+    # nav_controller.start()
 
-    # while program_launched:
-    #     menu_controller.run()
-
-    #     # players = controller.collect_players_infos()
-    #     # tournament = controller.create_tournament(players)
-    #     # # print(tournament.possible_pairing)
-    #     # # print(tournament.num_rounds)
-    #     # round = controller.create_rounds(tournament.players, tournament.num_rounds)
+    players = controller.collect_players_infos()
+    print(len(players))
+    tournament = controller.create_tournament(players)
+    # print(tournament.possible_pairing)
+    rounds = controller.create_rounds(tournament)
 
 
 if __name__ == "__main__":

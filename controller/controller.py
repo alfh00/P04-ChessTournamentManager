@@ -3,6 +3,7 @@ from views.views import Views
 import itertools
 import networkx as nx
 import matplotlib.pyplot as plt
+import random
 
 
 class Controller:
@@ -19,19 +20,29 @@ class Controller:
 
     def create_tournament(self, players):
         tournament_infos = self.views.get_tournament_infos()
-        name, location, num_rounds = tournament_infos
-        tournament = Tournament(name, location, players, num_rounds)
+        title, location, num_rounds = tournament_infos
+        tournament = Tournament(title, location, players, num_rounds)
         return tournament
 
-    def create_rounds(self, players, num_rounds):
-        players = players.sort(key=lambda x: x.rank, reverse=True)
-        # matrix = [[0 if col <= row else False for col in range(len(players))] for row in range(len(players))]
-        seen = []
-        for round_number in num_rounds:
-            print(f"Round {round_number} fight:")
-            mid = len(players) // 2
-            winners = players[:mid]
-            loosers = players[mid:]
+    def create_rounds(self, tournament):
+        all_pairs = tournament.possible_pairs
+        players = tournament.players
+        num_rounds = tournament.num_rounds
+        rounds = []
+
+        for round_number in range(0, num_rounds):
+            round_pairs = []
+            print(f"Round {round_number+1} fight:")
+            for i, match in enumerate(range(len(players) // 2)):
+                pair = random.choice(all_pairs)
+                print("THIS IS A PAIR", pair)
+                round_pairs.append(pair)
+                all_pairs.remove(pair)
+            print("LEN ALL PAIIIIRS", len(all_pairs))
+
+            round_matches = self.create_matches(round_pairs)
+
+            matches_results = self.collect_matches_results(round_matches)
 
     def create_matches(self, pairs):
         matches = []

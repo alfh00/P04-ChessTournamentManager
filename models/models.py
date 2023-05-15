@@ -10,12 +10,12 @@ class Tournament:
         self.start_date = datetime.now()
         self.end_date = None
         self.num_rounds = num_rounds or math.ceil(math.log2(len(players) - 1))
-        self.possible_pairing = self.generate_pairing(players)
+        self.possible_pairs = self.generate_pairs(players)
         self.rounds_list = []
         self.players = players
         self.description = ""
 
-    def generate_pairing(self, players):
+    def generate_pairs(self, players):
         return list(itertools.combinations(players, 2))
 
     def __str__(self):
@@ -41,10 +41,9 @@ class Player:
 
 
 class Round:
-    def __init__(self, players):
-        self.players = players
-        self.round_number = 0
-        self.pairing = []
+    def __init__(self, number, pairs):
+        self.round_number = number
+        self.pais = pairs
         self.matches = []
 
     def __str__(self):

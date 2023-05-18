@@ -20,9 +20,9 @@ class Views:
         tounrnament_num_rounds = input("prédeterminer le nombre de tour: ")
         return tounrnament_name, tounrnament_location, tounrnament_num_rounds
 
-    def get_match_result(self, match):
+    def get_match_result(self, pair):
         result = input(
-            f"Entrez le resultat du match {match.player_1.first_name} - {match.player_2.first_name}\n(1) Si {match.player_1.first_name} est gagnant\n(0) Si {match.player_2.first_name} est gagnant\n(0.5) égalité\n>>> "
+            f"Entrez le resultat du match {pair[0].first_name} - {pair[1].first_name}\n(1) Si {pair[0].first_name} est gagnant\n(0) Si {pair[1].first_name} est gagnant\n(0.5) égalité\n>>> "
         )
 
         return result

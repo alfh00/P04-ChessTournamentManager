@@ -13,7 +13,7 @@ def app():
     print(len(players))
     tournament = controller.create_tournament(players)
     # print(tournament.possible_pairing)
-    rounds = controller.create_rounds(tournament)
+    tournament = controller.play_rounds(tournament)
 
 
 if __name__ == "__main__":

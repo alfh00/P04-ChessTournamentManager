@@ -18,7 +18,6 @@ class MenuView:
         self.console.clear()
 
     def navigate_menu(self):
-        current_submenu_index = 0
         self.display_menu()
         while True:
             event = keyboard.read_event(suppress=True)

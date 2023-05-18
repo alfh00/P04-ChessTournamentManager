@@ -11,7 +11,7 @@ class Tournament:
         self.end_date = None
         self.num_rounds = num_rounds or math.ceil(math.log2(len(players) - 1))
         self.possible_pairs = self.generate_pairs(players)
-        self.rounds_list = []
+        self.rounds = []
         self.players = players
         self.description = ""
 
@@ -41,9 +41,8 @@ class Player:
 
 
 class Round:
-    def __init__(self, number, pairs):
+    def __init__(self, number):
         self.round_number = number
-        self.pais = pairs
         self.matches = []
 
     def __str__(self):

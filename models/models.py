@@ -42,7 +42,7 @@ class Player:
 
 class Round:
     def __init__(self, number):
-        self.round_number = number
+        self.number = number
         self.matches = []
 
     def __str__(self):

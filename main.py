@@ -1,20 +1,29 @@
 from controller.controller import Controller
 from controller.menu_controller import MenuController
+import curses
 
-program_launched = True
+
+def init_curses():
+    pass
 
 
 def app():
+    global controller, nav_controller
     controller = Controller()
-    # nav_controller = MenuController()
-    # nav_controller.start()
+    nav_controller = MenuController()
+    action = nav_controller.start()
+    print(action)
 
-    players = controller.collect_players_infos()
-    print(len(players))
-    tournament = controller.create_tournament(players)
-    # print(tournament.possible_pairing)
-    tournament = controller.play_rounds(tournament)
+    if action == "Lancer un tournois":
+        players = controller.collect_players_infos()
+        tournament = controller.create_tournament(players)
+        # print(tournament.possible_pairing)
+        tournament = controller.play_rounds(tournament)
 
 
 if __name__ == "__main__":
-    app()
+    try:
+        init_curses()
+        app()
+    finally:
+        curses.endwin()

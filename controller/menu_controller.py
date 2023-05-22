@@ -7,12 +7,13 @@ MENU = Menu(
     [
         Menu(
             "Joueurs",
-            [Menu("Afficher les joueurs"), Menu("Ajouter un joueur"), Menu("Supprimer un joueur")],
+            [Menu("Afficher les joueurs"), Menu("Ajouter un joueur"), Menu("Supprimer un joueur"), Menu("Retour")],
         ),
         Menu(
             "Tournois",
-            [Menu("Afficher les tournois"), Menu("Lancer un tournois")],
+            [Menu("Afficher les tournois"), Menu("Lancer un tournois"), Menu("Retour")],
         ),
+        Menu("Quitter"),
     ],
 )
 
@@ -20,7 +21,7 @@ MENU = Menu(
 class MenuController:
     def __init__(self):
         self.menu = MENU
+        self.menu_view = MenuView(self.menu)
 
     def start(self):
-        menu_view = MenuView(self.menu)
-        menu_view.navigate_menu()
+        return self.menu_view.navigate_menu()

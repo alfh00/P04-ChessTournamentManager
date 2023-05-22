@@ -3,7 +3,6 @@ from views.views import Views
 import itertools
 import networkx as nx
 import matplotlib.pyplot as plt
-import random
 
 
 class Controller:
@@ -73,7 +72,7 @@ class Controller:
                     player2.score += 0.5
                     match.result = "0.5 - 0.5"
                 # Add player pairing to previous_pairings
-                previous_pairings.append((player1, player2))
+                previous_pairings.append((player1.first_name, player2.first_name))
 
                 round.matches.append(match)
 
@@ -84,9 +83,13 @@ class Controller:
             for player in players:
                 print(f"{player.first_name} score: {player.score}")
 
-            # nx.draw_spring(graph, with_labels=True)
-            # plt.show()
+            nx.draw_spring(graph, with_labels=True)
+            plt.show()
         tournament.rounds = rounds
+        for round in tournament.rounds:
+            print("Round ", round.number)
+            for match in round.matches:
+                print(f"{match.player_1.first_name} {match.result} {match.player_2.first_name}")
         return tournament
 
     def create_match(self, pair):

@@ -1,16 +1,25 @@
+from models.models import Menu
 import curses
 
 
-menu = {
-    "Joueurs": {"Afficher les joueurs": None, "Ajouter un joueur": None, "Editer un joueur": None, "Retour": None},
-    "Tournois": {"Afficher les tournois": None, "Ajouter un tournois": None, "Gestion Tournois": None},
-    "Quitter": None,
-}
+MENU = Menu(
+    "Main Menu",
+    [
+        Menu(
+            "Joueurs",
+            [Menu("Afficher les joueurs"), Menu("Ajouter un joueur"), Menu("Supprimer un joueur")],
+        ),
+        Menu(
+            "Tournois",
+            [Menu("Afficher les tournois"), Menu("Lancer un tournois")],
+        ),
+    ],
+)
 
 
 class Views:
-    def __init__(self, menu):
-        self.menu = menu
+    def __init__(self, MENU):
+        self.menu = MENU
 
     def select_menu(self, selected_menu):
         for sub_menu in self.menu:
@@ -24,7 +33,7 @@ class Views:
         h, w = stdscr.getmaxyx()
 
         for idx, row in enumerate(self.menu):
-            x = w // 2 - len(row) // 2
+            x = w // 2 - len(row.name) // 2
             y = h // 2 - len(self.menu) // 2 + idx
 
             if idx == selected_row:
@@ -66,5 +75,5 @@ class Views:
         curses.wrapper(self.navigate)
 
 
-view = Views(menu)
+view = Views()
 view.launch()

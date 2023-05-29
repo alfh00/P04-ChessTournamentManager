@@ -1,6 +1,6 @@
-from datetime import datetime
-import math
 import itertools
+import math
+from datetime import datetime
 
 
 class Tournament:
@@ -9,11 +9,17 @@ class Tournament:
         self.location = location
         self.start_date = datetime.now()
         self.end_date = None
-        self.num_rounds = num_rounds or math.ceil(math.log2(len(players) - 1))
+        self.num_rounds = self.calculate_rounds_number(num_rounds, players)
         self.possible_pairs = self.generate_pairs(players)
         self.rounds = []
         self.players = players
         self.description = ""
+
+    def calculate_rounds_number(self, num_rounds, players):
+        if not num_rounds or num_rounds == "":
+            return math.ceil(math.log2(len(players) - 1))
+        else:
+            return int(num_rounds)
 
     def generate_pairs(self, players):
         return list(itertools.combinations(players, 2))

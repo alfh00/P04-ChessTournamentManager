@@ -1,6 +1,6 @@
-from models.models import Menu
 import curses
 
+from models.models import Menu
 
 MENU = Menu(
     "Main Menu",

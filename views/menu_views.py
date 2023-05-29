@@ -2,41 +2,42 @@ import curses
 
 
 class MenuView:
-    def __init__(self, menu):
+    def __init__(self, menu, console):
+        hei, wid, w = console  # (hei, wei, w)
         self.menu = menu
         self.current_menu = menu
         self.current_row = 0
-        self.scr = curses.initscr()
+        self.win = w
+        self.hei = hei
+        self.wid = wid
         # self.menu.submenus.append("Retour")
 
     def print_menu(self):
-        self.scr.clear()
-        h, w = self.scr.getmaxyx()
+        self.win.clear()
 
         for idx, row in enumerate(self.current_menu.submenus):
-            x = w // 2 - len(row.name) // 2
-            y = h // 2 - len(self.current_menu.submenus) // 2 + idx
+            x = self.wid // 2 - len(row.name) // 2
+            y = self.hei // 2 - len(self.current_menu.submenus) // 2 + idx
 
             if idx == self.current_row:
-                # self.scr.attron(curses.color_pair(1))
-                self.scr.addstr(y, x, row.name, curses.color_pair(1))
-                # self.scr.attroff(curses.color_pair(1))
+                # self.win.attron(curses.color_pair(1))
+                self.win.addstr(y, x, row.name, curses.color_pair(1))
+                # self.win.attroff(curses.color_pair(1))
             else:
-                self.scr.addstr(y, x, row.name)
-
-        self.scr.refresh()
+                self.win.addstr(y, x, row.name)
+            self.win.addstr(0, 0, self.current_menu.name, curses.color_pair(1))
+        self.win.refresh()
 
     def navigate_menu(self):
-        curses.curs_set(0)
-        curses.start_color()
-        self.scr.keypad(1)
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-
         self.print_menu()
 
         while True:
-            key = self.scr.getch()
-            self.scr.clear()
+            # return action if on a leaf submenu pressed
+            if not self.current_menu.submenus:
+                return self.current_menu.name
+            # otherwise keep navigating
+            key = self.win.getch()
+            self.win.clear()
 
             if key == curses.KEY_UP and self.current_row > 0:
                 self.current_row -= 1
@@ -44,24 +45,20 @@ class MenuView:
                 self.current_row += 1
             elif key == curses.KEY_ENTER or key in [10, 13]:
                 # Quit if we are on the root menu
-                if self.menu == self.current_menu and self.current_row == len(self.current_menu.submenus) - 1:
-                    break
+                if self.menu == self.current_menu and self.current_row == len(self.menu.submenus) - 1:
+                    return "Quitter"
                 # get parent menu if we are on a submenu
                 elif self.current_row == len(self.current_menu.submenus) - 1:
                     self.current_menu = self.get_parent_menu(self.menu, self.current_menu)
                     self.current_row = 0
-                elif not len(self.current_menu.submenus):
-                    return self.current_menu.name
-                # get child submenus on selection
+                # get child submenus if selected
                 else:
                     self.current_menu = self.current_menu.submenus[self.current_row]
                     self.current_row = 0
-
+            print(self.current_menu.name)
+            print(self.current_row)
             self.print_menu()
-            self.scr.refresh()
-
-    def start(self):
-        curses.wrapper(self.navigate_menu)
+            self.win.refresh()
 
     def get_parent_menu(self, root_menu, submenu):
         for menu in root_menu.submenus:

@@ -1,13 +1,16 @@
-from models.models import Player, Tournament, Round, Match
-from views.views import Views
 import itertools
-import networkx as nx
+from datetime import datetime
+
 import matplotlib.pyplot as plt
+import networkx as nx
+
+from models.models import Match, Player, Round, Tournament
+from views.views import Views
 
 
 class Controller:
-    def __init__(self):
-        self.views = Views()
+    def __init__(self, console):
+        self.views = Views(console)
 
     def collect_players_infos(self):
         players_infos = self.views.get_players_infos()
@@ -44,6 +47,7 @@ class Controller:
         ]
 
         for round_num in range(1, num_rounds + 1):
+            self.views.print_round_number(round_num)
             print(f"Round {round_num}:")
             round = Round(round_num)
 
@@ -60,6 +64,7 @@ class Controller:
             for player1, player2 in matching:
                 match = Match((player1, player2))
                 result = self.views.get_match_result((player1, player2))
+                print(f"result from controller: {result}")
 
                 if result == "1":
                     player1.score += 1
@@ -83,13 +88,14 @@ class Controller:
             for player in players:
                 print(f"{player.first_name} score: {player.score}")
 
-            nx.draw_spring(graph, with_labels=True)
-            plt.show()
+            # nx.draw_spring(graph, with_labels=True)
+            # plt.show()
+
         tournament.rounds = rounds
-        for round in tournament.rounds:
-            print("Round ", round.number)
-            for match in round.matches:
-                print(f"{match.player_1.first_name} {match.result} {match.player_2.first_name}")
+        tournament.end_date = datetime.now()
+
+        self.views.print_tournament_report(tournament)
+
         return tournament
 
     def create_match(self, pair):

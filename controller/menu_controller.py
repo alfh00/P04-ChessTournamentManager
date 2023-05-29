@@ -1,6 +1,5 @@
-from views.menu_views import MenuView
 from models.models import Menu
-
+from views.menu_views import MenuView
 
 MENU = Menu(
     "Main Menu",
@@ -19,9 +18,9 @@ MENU = Menu(
 
 
 class MenuController:
-    def __init__(self):
+    def __init__(self, console):
         self.menu = MENU
-        self.menu_view = MenuView(self.menu)
+        self.menu_view = MenuView(self.menu, console)
 
     def start(self):
         return self.menu_view.navigate_menu()

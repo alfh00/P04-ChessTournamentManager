@@ -7,6 +7,9 @@ import networkx as nx
 from models.models import Match, Player, Round, Tournament
 from views.views import Views
 
+import json
+import jsonpickle
+
 
 class Controller:
     def __init__(self, console):
@@ -16,7 +19,7 @@ class Controller:
         players_infos = self.views.get_players_infos()
         players = []
         for player in players_infos:
-            players.append(Player(player))
+            players.append(Player(player["Prénom"],player["Nom"],player["Date de naissance"]))
 
         return players
 
@@ -27,7 +30,6 @@ class Controller:
         return tournament
 
     def play_rounds(self, tournament):
-        all_pairs = tournament.possible_pairs
         players = tournament.players
         num_rounds = tournament.num_rounds
         rounds = []
@@ -37,7 +39,7 @@ class Controller:
         graph.add_nodes_from(players)
 
         # Keep track of previous matches
-        previous_pairings = []
+        previous_pairings = tournament.previous_pairing
 
         # Generate all possible pairings (matches), excluding previous pairings
         possible_pairings = [
@@ -46,7 +48,7 @@ class Controller:
             if (p1, p2) not in previous_pairings and (p2, p1) not in previous_pairings
         ]
 
-        for round_num in range(1, num_rounds + 1):
+        for round_num in range(len(tournament.rounds) + 1, num_rounds + 1):
             self.views.print_round_number(round_num)
             print(f"Round {round_num}:")
             round = Round(round_num)
@@ -64,7 +66,6 @@ class Controller:
             for player1, player2 in matching:
                 match = Match((player1, player2))
                 result = self.views.get_match_result((player1, player2))
-                print(f"result from controller: {result}")
 
                 if result == "1":
                     player1.score += 1
@@ -77,21 +78,27 @@ class Controller:
                     player2.score += 0.5
                     match.result = "0.5 - 0.5"
                 # Add player pairing to previous_pairings
-                previous_pairings.append((player1.first_name, player2.first_name))
+                tournament.prev_pairs.append((player1, player2))
 
                 round.matches.append(match)
 
-            rounds.append(round)
+            tournament.rounds.append(round)
+
+            if self.views.ask_save():
+                tournament.save()
+                return self.views.show_confirmation('Tournois sauvegardé')
+           
+
 
             players.sort(key=lambda x: x.score, reverse=True)
 
-            for player in players:
-                print(f"{player.first_name} score: {player.score}")
+            # for player in players:
+            #     print(f"{player.first_name} score: {player.score}")
 
             # nx.draw_spring(graph, with_labels=True)
             # plt.show()
 
-        tournament.rounds = rounds
+        
         tournament.end_date = datetime.now()
 
         self.views.print_tournament_report(tournament)
@@ -108,3 +115,24 @@ class Controller:
             result = self.views.get_match_result(match)
             match.result = result
         return matches
+    
+    def save_tournament(self, tournament):
+        pass
+
+    def find_tournament(self):
+        with open("./db/tournaments.json", "r") as f:
+            data = json.load(f)["tournaments"]
+        
+        all_tournaments = [jsonpickle.decode(tournament) for tournament in data]
+
+        tournament = self.views.show_tournament_list(all_tournaments)
+        self.play_rounds(tournament)
+    
+    def print_report(self):    
+        with open("./db/tournaments.json", "r") as f:
+            data = json.load(f)["tournaments"]
+        
+        all_tournaments = [jsonpickle.decode(tournament) for tournament in data]
+
+        tournament = self.views.show_tournament_list(all_tournaments)
+        self.views.print_tournament_report(tournament)

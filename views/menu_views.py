@@ -46,7 +46,7 @@ class MenuView:
             elif key == curses.KEY_ENTER or key in [10, 13]:
                 # Quit if we are on the root menu
                 if self.menu == self.current_menu and self.current_row == len(self.menu.submenus) - 1:
-                    return "Quitter"
+                    quit()
                 # get parent menu if we are on a submenu
                 elif self.current_row == len(self.current_menu.submenus) - 1:
                     self.current_menu = self.get_parent_menu(self.menu, self.current_menu)
@@ -55,8 +55,8 @@ class MenuView:
                 else:
                     self.current_menu = self.current_menu.submenus[self.current_row]
                     self.current_row = 0
-            print(self.current_menu.name)
-            print(self.current_row)
+            # print(self.current_menu.name)
+            # print(self.current_row)
             self.print_menu()
             self.win.refresh()
 

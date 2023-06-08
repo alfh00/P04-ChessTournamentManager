@@ -10,7 +10,7 @@ MENU = Menu(
         ),
         Menu(
             "Tournois",
-            [Menu("Afficher les tournois"), Menu("Lancer un tournois"), Menu("Retour")],
+            [Menu("Nouveau tournois"), Menu("Charger un tournois"), Menu("Afficher les rapports"), Menu("Retour")],
         ),
         Menu("Quitter"),
     ],

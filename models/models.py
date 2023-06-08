@@ -1,41 +1,58 @@
 import itertools
 import math
 from datetime import datetime
+import json
+import jsonpickle
+
+
 
 
 class Tournament:
     def __init__(self, name, location, players, num_rounds=None):
         self.name = name
         self.location = location
-        self.start_date = datetime.now()
+        self.start_date = datetime.now().strftime("%m/%d/%Y, %H:%M")
         self.end_date = None
         self.num_rounds = self.calculate_rounds_number(num_rounds, players)
-        self.possible_pairs = self.generate_pairs(players)
+        self.prev_pairs = []
         self.rounds = []
         self.players = players
         self.description = ""
+        self.PATH = "./db/tournaments.json"
 
     def calculate_rounds_number(self, num_rounds, players):
         if not num_rounds or num_rounds == "":
             return math.ceil(math.log2(len(players) - 1))
         else:
             return int(num_rounds)
+    
+    def load_data(self):
+        with open(self.PATH, "r") as f:
+            data = json.load(f)
+        return data
 
-    def generate_pairs(self, players):
-        return list(itertools.combinations(players, 2))
+    def save_data(self, data):
+        with open(self.PATH, "w") as f:
+            json.dump(data, f, indent=4)
+        
+    def save(self):
+        data = self.load_data()
+        serialized_tournament = jsonpickle.encode(self)
+        data["tournaments"].append(serialized_tournament)
+        self.save_data(data)
 
     def __str__(self):
-        return f"Tournament(Name: {self.name},\nLocation: {self.location},\nStart: {self.start_date},\nEnd: {self.end_date},\nRounds_number: {self.rounds_number},\nRounds_list{self.rounds_list},\nPlayers: {self.players},\nDescription: {self.description})"
-
+        return f"Tournament(name: {self.name},\nLocation: {self.location},\nStart: {self.start_date},\nEnd: {self.end_date},\nRounds_num{self.num_rounds},n\prev_pairs{self.prev_pairs},\nRounds{self.rounds},\nPlayers: {self.players},\nDescription: {self.description})"
+    
     def __repr__(self):
         return self.__str__()
 
 
 class Player:
-    def __init__(self, first_name):
-        self.first_name = first_name
-        self.last_name = ""
-        self.birthday = ""
+    def __init__(self, fname, lname, bday):
+        self.first_name = fname
+        self.last_name = lname
+        self.birthday = bday
         self.rank = 0
         self.score = 0
 
@@ -52,10 +69,10 @@ class Round:
         self.matches = []
 
     def __str__(self):
-        return f"Round {self.round_number}: {len(self.matches)} matches"
+        return f"Round {self.number}: {len(self.matches)} matches"
 
     def __repr__(self):
-        return f"Round(players={self.players}, round_number={self.round_number}, pairing={self.pairing}, matches={self.matches})"
+        return f"Round(round_number={self.number}, matches={self.matches})"
 
 
 class Match:
@@ -65,7 +82,7 @@ class Match:
         self.result = None
 
     def __str__(self):
-        return f"{self.player_1.first_name} vs {self.player_2.first_name}"
+        return f"{self.player_1.first_name} vs {self.player_2.first_name}\n result {self.result}"
 
     def __repr__(self):
         return f"Match({self.player_1.first_name}, {self.player_2.first_name}, result={self.result})"
@@ -75,3 +92,8 @@ class Menu:
     def __init__(self, name, submenus=None):
         self.name = name
         self.submenus = submenus if submenus else []
+
+
+# class RoundEncoder(json.JSONEncoder):
+#     def default(self, round):
+#             return [round.name, round.matches]

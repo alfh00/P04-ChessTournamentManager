@@ -55,12 +55,29 @@ class Player:
         self.birthday = bday
         self.rank = 0
         self.score = 0
+        self.PATH = "./db/players.json"
 
-        def __str__(self):
-            return f"Player({self.first_name}, {self.last_name}, {self.birthday}, {self.rank}, {self.score})"
+    
+    def load_data(self):
+        with open(self.PATH, "r") as f:
+            data = json.load(f)
+        return data
+    
+    def save_data(self, data):
+        with open(self.PATH, "w") as f:
+            json.dump(data, f, indent=4)
+        
+    def save(self):
+        data = self.load_data()
+        serialized_tournament = jsonpickle.encode(self)
+        data["players"].append(serialized_tournament)
+        self.save_data(data)
 
-        def __repr__(self):
-            return self.__str__()
+    def __str__(self):
+        return f"Player({self.first_name}, {self.last_name}, {self.birthday}, {self.rank}, {self.score})"
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class Round:

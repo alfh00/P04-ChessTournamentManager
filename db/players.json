@@ -1,40 +1,8 @@
 {
-  "length": 7,
-  "players": [
-    {
-      "id": "RR0550",
-      "first_name": "Gwenny",
-      "last_name": "Royl"
-    },
-    {
-      "id": "NA2504",
-      "first_name": "Lacey",
-      "last_name": "Partlett"
-    },
-    {
-      "id": "VL1344",
-      "first_name": "Rudiger",
-      "last_name": "O'Doogan"
-    },
-    {
-      "id": "DN6391",
-      "first_name": "Fred",
-      "last_name": "Mosco"
-    },
-    {
-      "id": "NJ1712",
-      "first_name": "Carey",
-      "last_name": "Luigi"
-    },
-    {
-      "id": "KY1806",
-      "first_name": "Morganeeee",
-      "last_name": "Harrisse"
-    },
-    {
-      "id": "AA001",
-      "first_name": "Al",
-      "last_name": "Fh"
-    }
-  ]
+    "players": [
+        "{\"py/object\": \"models.models.Player\", \"first_name\": \"AL\", \"last_name\": \"FH\", \"birthday\": \"11-11-22\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}",
+        "{\"py/object\": \"models.models.Player\", \"first_name\": \"AL\", \"last_name\": \"FH\", \"birthday\": \"11-22-11\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}",
+        "{\"py/object\": \"models.models.Player\", \"first_name\": \"AL\", \"last_name\": \"FH\", \"birthday\": \"11-11-22\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}",
+        "{\"py/object\": \"models.models.Player\", \"first_name\": \"Fred\", \"last_name\": \"Sam\", \"birthday\": \"11-11-11\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}"
+    ]
 }

@@ -35,6 +35,18 @@ def app():
         controller = Controller(console)
         action = nav_controller.start()
 
+        if action == "Afficher les joueurs":
+            controller.show_players()
+
+        if action == "Ajouter un joueur":
+            controller.add_player()
+
+        if action == "Supprimer un joueur":
+            pass
+
+
+
+
         if action == "Nouveau tournois":
             players = controller.collect_players_infos()
             tournament = controller.create_tournament(players)
@@ -42,6 +54,7 @@ def app():
         
         if action == "Charger un tournois":
             tournament = controller.find_tournament()
+            controller.play_rounds(tournament)
         
         if action == "Afficher les rapports":
             controller.print_report()

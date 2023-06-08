@@ -39,7 +39,7 @@ class Controller:
         graph.add_nodes_from(players)
 
         # Keep track of previous matches
-        previous_pairings = tournament.previous_pairing
+        previous_pairings = tournament.prev_pairs
 
         # Generate all possible pairings (matches), excluding previous pairings
         possible_pairings = [
@@ -86,10 +86,8 @@ class Controller:
 
             if self.views.ask_save():
                 tournament.save()
-                return self.views.show_confirmation('Tournois sauvegardé')
+                return self.views.show_confirmation('Tournois sauvegardé', 3)
            
-
-
             players.sort(key=lambda x: x.score, reverse=True)
 
             # for player in players:
@@ -102,6 +100,8 @@ class Controller:
         tournament.end_date = datetime.now()
 
         self.views.print_tournament_report(tournament)
+        tournament.save()
+        self.views.show_confirmation('Tournois sauvegardé', 3)
 
         return tournament
 
@@ -124,9 +124,9 @@ class Controller:
             data = json.load(f)["tournaments"]
         
         all_tournaments = [jsonpickle.decode(tournament) for tournament in data]
-
         tournament = self.views.show_tournament_list(all_tournaments)
-        self.play_rounds(tournament)
+        return tournament
+        
     
     def print_report(self):    
         with open("./db/tournaments.json", "r") as f:
@@ -136,3 +136,24 @@ class Controller:
 
         tournament = self.views.show_tournament_list(all_tournaments)
         self.views.print_tournament_report(tournament)
+
+    def add_player(self):
+        players_infos = self.views.get_players_infos()
+        
+        players = []
+        for player in players_infos:
+            players.append((Player(player["Prénom"],player["Nom"],player["Date de naissance"])))
+        
+        for player in players:
+            player.save()
+            self.views.show_confirmation(f"{player.first_name} {player.last_name} sauvegardé avec succes", 1)
+    
+    def show_players(self):
+        with open("./db/players.json", "r") as f:
+            player_data = json.load(f)["players"]
+        
+        all_players = [jsonpickle.decode(player) for player in player_data]
+
+        player = self.views.show_players_list(all_players)
+
+        return self.views.show_player_infos(player)

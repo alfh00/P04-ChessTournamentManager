@@ -35,7 +35,7 @@ class Views:
 
             players.append(player_infos)
             
-            gathering = self.ask_for_confirmation('Ajouter encore des joueurs?')
+            gathering = self.ask_for_confirmation('Ajouter encore des joueurs Y/N?')
 
         return players
 
@@ -87,13 +87,13 @@ class Views:
         res = self.win.getstr().decode("utf-8").upper()
         return False if res == "C" else True
     
-    def show_confirmation( self, message ):
+    def show_confirmation( self, message, time ):
         self.win.clear()
         w = self.wid // 2 - len(message) // 2
         h = self.hei // 2 
         self.win.addstr(h, w, message)
         self.win.refresh()
-        sleep(3)
+        sleep(time)
     
     def ask_for_confirmation( self, message ):
         self.win.clear()
@@ -150,4 +150,55 @@ class Views:
 
         
         return navigate_menu(tournament_list)
+    
+    def show_players_list(self, players_list):
+
+        def print_list(curr_row):
+            for idx, p in enumerate(players_list):
+                x = self.wid // 2 - len(f"{p.first_name} {p.last_name}") // 2
+                y = self.hei // 2 - len(players_list) // 2 + idx
+
+                if idx == curr_row:
+                    self.win.addstr(y, x, f"{p.first_name} {p.last_name}", curses.color_pair(1))
+                else:
+                    self.win.addstr(y, x, f"{p.first_name} {p.last_name}")
+                
+            self.win.refresh()
+        
+        def navigate_menu(players_list):
+            current_idx = 0
+            print_list(current_idx)
+
+            while True:
+                
+                if not players_list:
+                    return 
+                # otherwise keep navigating
+                key = self.win.getch()
+                self.win.clear()
+
+                if key == curses.KEY_UP and current_idx > 0:
+                    current_idx -= 1
+                elif key == curses.KEY_DOWN and current_idx < len(players_list) - 1:
+                    current_idx += 1
+                elif key == curses.KEY_ENTER or key in [10, 13]:
+                    curses.nocbreak()
+                    self.win.keypad(False)
+                    curses.echo()
+                    curses.endwin()
+                    
+                    return players_list[current_idx]
+                    
+                print_list(current_idx)
+                self.win.refresh()
+
+        
+        return navigate_menu(players_list)
+    
+    def show_player_infos(self, player):
+        self.win.clear()
+        self.win.addstr(f"Prénom: {player.first_name}, Nom:{player.last_name}\n\n")
+        self.win.addstr(f"Date de naissance: {player.birthday}\n\n")
+        self.win.addstr(f"Rank: {player.rank}")
+        self.win.getch()
         

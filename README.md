@@ -2,6 +2,7 @@
 
 This is a tournament management system implemented in Python using the curses library. The system allows users to create and manage tournaments, track players, and record match results.
 ![alt text](https://fr.girotti.ch/media/wysiwyg/logo-smart-choice.svg)
+<img src="https://fr.girotti.ch/media/wysiwyg/logo-smart-choice.svg" alt="Image" width="300" height="200">
 ## Features
 
 - Create and manage tournaments

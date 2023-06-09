@@ -16,7 +16,7 @@ class Views:
 
         while gathering:
             self.win.clear()
-            player_infos = {"Prénom":"", "Nom":"","Date de naissance":""}
+            player_infos = {"Prénom": "", "Nom": "", "Date de naissance": ""}
 
             for key, val in player_infos.items():
                 curses.curs_set(1)
@@ -34,81 +34,95 @@ class Views:
                 player_infos[key] = box.gather().strip().replace("\n", "")
 
             players.append(player_infos)
-            
-            gathering = self.ask_for_confirmation('Ajouter encore des joueurs Y/N?')
+
+            gathering = self.ask_for_confirmation("Ajouter encore des joueurs Y/N?")
 
         return players
 
     def get_tournament_infos(self):
         curses.echo()
         self.win.clear()
-        self.win.addstr("Entrez le nom du tournois: ")
+        self.win.addstr("Entrez le nom du tournois: \n")
         tounrnament_name = self.win.getstr().decode("utf-8")
-        self.win.addstr("Entrez le Lieu du tournois: ")
+        self.win.addstr("Entrez le Lieu du tournois: \n")
         tounrnament_location = self.win.getstr().decode("utf-8")
-        self.win.addstr("prédeterminer le nombre de tour: ")
+        self.win.addstr("prédeterminer le nombre de tour (à laisser vide pour calcul auto): \n")
         tounrnament_num_rounds = self.win.getstr().decode("utf-8")
         self.win.refresh()
 
-        # self.win.refresh
-        # tounrnament_location = input("Où se passe-t-il: ")
-        # tounrnament_num_rounds = input("prédeterminer le nombre de tour: ")
         return tounrnament_name, tounrnament_location, tounrnament_num_rounds
 
     def get_match_result(self, pair):
         self.win.scrollok(True)
-        self.win.addstr(
-            f"Entrez le resultat du match {pair[0].first_name} - {pair[1].first_name}\n(1) Si {pair[0].first_name} est gagnant\n(0) Si {pair[1].first_name} est gagnant\n(0.5) égalité\n>>> ",
-        )
-        result = self.win.getstr().decode("utf-8")
-        print(f"{result}")
-        self.win.refresh()
+        curses.curs_set(1)
+        result = ""
+        while result not in ["0", "1", "0.5"]:
+            self.win.addstr(
+                f"Entrez le resultat du match {pair[0].first_name} - {pair[1].first_name}\
+                    \n(1) Si {pair[0].first_name} est gagnant\n\
+                    (0) Si {pair[1].first_name} est gagnant\n(0.5) égalité\n>>> ",
+            )
+            result = self.win.getstr().decode("utf-8")
 
+            self.win.refresh()
+
+        curses.curs_set(0)
         return result
 
     def print_tournament_report(self, tournament):
-        curses.curs_set(0)
+        half_win = self.hei // 2
+
         self.win.clear()
         self.win.addstr(f"Tournoi: {tournament.name}, Lieu:{tournament.location}\n\n")
-        self.win.addstr(f"Début: {tournament.start_date}, Fin:{tournament.end_date}\n\n")
+        finish_date = tournament.end_date or "Tournois en cours"
+        self.win.addstr(f"Début: {tournament.start_date}, Fin: {finish_date}\n\n")
 
         for round in tournament.rounds:
             self.win.addstr(f"\nRound : {round.number}\n\n")
             for match in round.matches:
                 self.win.addstr(f"{match.player_1.first_name} {match.result} {match.player_2.first_name}\n")
+            self.win.refresh()
+
+        scorewin = self.win.subwin(25, 50, 5, half_win)
+
+        # win = curses.newwin(height, width, begin_y, begin_x)
+        scorewin.clear()
+
+        for i, player in enumerate(tournament.players):
+            scorewin.addstr(i, 0, f"Joueur: {player.first_name}  Score : {player.score}")
+            scorewin.addstr(i, 20, f"Score : {player.score}")
+        scorewin.refresh()
 
         self.win.getch()
 
     def print_round_number(self, round_num):
         self.win.addstr(f"\nTour N°: {round_num}\n\n")
-    
+
     def ask_save(self):
         self.win.addstr("Continuez (C) ou Sauveagrder (S): ")
         res = self.win.getstr().decode("utf-8").upper()
         return False if res == "C" else True
-    
-    def show_confirmation( self, message, time ):
+
+    def show_confirmation(self, message, time):
         self.win.clear()
         w = self.wid // 2 - len(message) // 2
-        h = self.hei // 2 
+        h = self.hei // 2
         self.win.addstr(h, w, message)
         self.win.refresh()
         sleep(time)
-    
-    def ask_for_confirmation( self, message ):
+
+    def ask_for_confirmation(self, message):
         self.win.clear()
         w = self.wid // 2 - len(message) // 2
-        h = self.hei // 2 
+        h = self.hei // 2
         self.win.addstr(h, w, message)
         curses.echo()
-        res = self.win.getstr(h+1, w).decode("utf-8").upper()
+        res = self.win.getstr(h + 1, w).decode("utf-8").upper()
         self.win.refresh()
         curses.noecho()
         return False if res == "N" else True
-        
 
     def show_tournament_list(self, tournament_list):
-
         def print_list(curr_row):
             for idx, t in enumerate(tournament_list):
                 x = self.wid // 2 - len(t.name) // 2
@@ -118,17 +132,16 @@ class Views:
                     self.win.addstr(y, x, t.name, curses.color_pair(1))
                 else:
                     self.win.addstr(y, x, t.name)
-                
+
             self.win.refresh()
-        
+
         def navigate_menu(tournament_list):
             current_idx = 0
             print_list(current_idx)
 
             while True:
-                
                 if not tournament_list:
-                    return 
+                    return
                 # otherwise keep navigating
                 key = self.win.getch()
                 self.win.clear()
@@ -142,17 +155,15 @@ class Views:
                     self.win.keypad(False)
                     curses.echo()
                     curses.endwin()
-                    
+
                     return tournament_list[current_idx]
-                    
+
                 print_list(current_idx)
                 self.win.refresh()
 
-        
         return navigate_menu(tournament_list)
-    
-    def show_players_list(self, players_list):
 
+    def show_players_list(self, players_list):
         def print_list(curr_row):
             for idx, p in enumerate(players_list):
                 x = self.wid // 2 - len(f"{p.first_name} {p.last_name}") // 2
@@ -162,17 +173,16 @@ class Views:
                     self.win.addstr(y, x, f"{p.first_name} {p.last_name}", curses.color_pair(1))
                 else:
                     self.win.addstr(y, x, f"{p.first_name} {p.last_name}")
-                
+
             self.win.refresh()
-        
+
         def navigate_menu(players_list):
             current_idx = 0
             print_list(current_idx)
 
             while True:
-                
                 if not players_list:
-                    return 
+                    return
                 # otherwise keep navigating
                 key = self.win.getch()
                 self.win.clear()
@@ -186,19 +196,17 @@ class Views:
                     self.win.keypad(False)
                     curses.echo()
                     curses.endwin()
-                    
+
                     return players_list[current_idx]
-                    
+
                 print_list(current_idx)
                 self.win.refresh()
 
-        
         return navigate_menu(players_list)
-    
+
     def show_player_infos(self, player):
         self.win.clear()
         self.win.addstr(f"Prénom: {player.first_name}, Nom:{player.last_name}\n\n")
         self.win.addstr(f"Date de naissance: {player.birthday}\n\n")
         self.win.addstr(f"Rank: {player.rank}")
         self.win.getch()
-        

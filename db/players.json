@@ -1,8 +1,5 @@
 {
     "players": [
-        "{\"py/object\": \"models.models.Player\", \"first_name\": \"AL\", \"last_name\": \"FH\", \"birthday\": \"11-11-22\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}",
-        "{\"py/object\": \"models.models.Player\", \"first_name\": \"AL\", \"last_name\": \"FH\", \"birthday\": \"11-22-11\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}",
-        "{\"py/object\": \"models.models.Player\", \"first_name\": \"AL\", \"last_name\": \"FH\", \"birthday\": \"11-11-22\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}",
-        "{\"py/object\": \"models.models.Player\", \"first_name\": \"Fred\", \"last_name\": \"Sam\", \"birthday\": \"11-11-11\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}"
+        "{\"py/object\": \"models.models.Player\", \"first_name\": \"joueurtest1\", \"last_name\": \"nomtest1\", \"birthday\": \"11-11-11\", \"rank\": 0, \"score\": 0, \"PATH\": \"./db/players.json\"}"
     ]
 }

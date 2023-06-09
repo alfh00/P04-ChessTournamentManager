@@ -23,7 +23,8 @@ class Tournament:
             PATH (str): Path to the tournament data file.
 
         Methods:
-            calculate_rounds_number(num_rounds, players): Calculates the number of rounds based on the number of players.
+            calculate_rounds_number(num_rounds, players):\
+            Calculates the number of rounds based on the number of players.
             load_data(): Loads tournament data from the data file.
             save_data(data): Saves tournament data to the data file.
             save(): Saves the tournament object to the data file.

@@ -23,4 +23,9 @@ class MenuController:
         self.menu_view = MenuView(self.menu, console)
 
     def start(self):
+        """
+        Starts the menu navigation and returns the selected action.
+        Returns:
+            Selected action from the menu.
+        """
         return self.menu_view.navigate_menu()

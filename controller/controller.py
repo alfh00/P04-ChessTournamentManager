@@ -13,9 +13,19 @@ import jsonpickle
 
 class Controller:
     def __init__(self, console):
+        """
+        Initializes the Controller class.
+        Args:
+            console: Tuple containing information about the console window.
+        """
         self.views = Views(console)
 
     def collect_players_infos(self):
+        """
+        Collects information about players from the user.
+        Returns:
+            List of Player objects with the collected information.
+        """
         players_infos = self.views.get_players_infos()
         players = []
         for player in players_infos:
@@ -23,12 +33,26 @@ class Controller:
         return players
 
     def create_tournament(self, players):
+        """
+        Creates a new tournament.
+        Args:
+            players: List of Player objects participating in the tournament.
+        Returns:
+            Tournament object representing the created tournament.
+        """
         tournament_infos = self.views.get_tournament_infos()
         title, location, num_rounds = tournament_infos
         tournament = Tournament(title, location, players, num_rounds)
         return tournament
 
     def play_rounds(self, tournament):
+        """
+        Plays the rounds of the tournament.
+        Args:
+            tournament: Tournament object representing the tournament to play.
+        Returns:
+            Tournament object after playing the rounds.
+        """
         players = tournament.players
         num_rounds = tournament.num_rounds
 
@@ -103,16 +127,35 @@ class Controller:
         return tournament
 
     def create_match(self, pair):
+        """
+        Creates a Match object with the given pair of players.
+        Args:
+            pair: Tuple representing the pair of players.
+        Returns:
+            Match object representing the created match.
+        """
         match = Match(pair)
         return match
 
     def collect_matches_results(self, matches):
+        """
+        Collects the results of matches from the user.
+        Args:
+            matches: List of Match objects.
+        Returns:
+            List of Match objects with the results added.
+        """
         for match in matches:
             result = self.views.get_match_result(match)
             match.result = result
         return matches
 
     def find_tournament_and_play(self):
+        """
+        Finds a tournament in progress and continues playing it.
+        Returns:
+            Tournament object after playing the rounds.
+        """
         with open("./db/tournaments.json", "r") as f:
             data = json.load(f)["tournaments"]
 
@@ -125,6 +168,9 @@ class Controller:
             return self.play_rounds(tournament)
 
     def print_report(self):
+        """
+        Prints the report of a tournament.
+        """
         with open("./db/tournaments.json", "r") as f:
             data = json.load(f)["tournaments"]
 
@@ -134,6 +180,9 @@ class Controller:
         self.views.print_tournament_report(tournament)
 
     def add_player(self):
+        """
+        Adds a player to the database.
+        """
         players_infos = self.views.get_players_infos()
 
         players = []
@@ -145,6 +194,11 @@ class Controller:
             self.views.show_confirmation(f"{player.first_name} {player.last_name} sauvegardé avec succes", 1)
 
     def show_players(self):
+        """
+        Shows the list of players.
+        Returns:
+            Selected Player object.
+        """
         with open("./db/players.json", "r") as f:
             player_data = json.load(f)["players"]
 
@@ -158,6 +212,13 @@ class Controller:
             return player
 
     def show_player_info(self, player):
+        """
+        Shows the information of a player.
+        Args:
+            player: Player object to show the information of.
+        Returns:
+            Information of the player.
+        """
         return self.views.show_player_infos(player)
 
     def delete_player(self, player):

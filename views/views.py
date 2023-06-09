@@ -5,12 +5,24 @@ from time import sleep
 
 class Views:
     def __init__(self, console):
+        """
+        Initializes the Views object.
+
+        Args:
+            console (tuple): A tuple containing height, width, and curses window.
+        """
         hei, wid, win = console  # (hei, wei, win)
         self.win = win
         self.hei = hei
         self.wid = wid
 
     def get_players_infos(self):
+        """
+        Gets the information of players from the user.
+
+        Returns:
+            list: A list of dictionaries containing player information.
+        """
         players = []
         gathering = True
 
@@ -40,6 +52,12 @@ class Views:
         return players
 
     def get_tournament_infos(self):
+        """
+        Gets the information of a tournament from the user.
+
+        Returns:
+            tuple: A tuple containing the tournament name, location, and number of rounds.
+        """
         curses.echo()
         self.win.clear()
         self.win.addstr("Entrez le nom du tournois: \n")
@@ -53,6 +71,15 @@ class Views:
         return tounrnament_name, tounrnament_location, tounrnament_num_rounds
 
     def get_match_result(self, pair):
+        """
+        Gets the result of a match from the user.
+
+        Args:
+            pair (tuple): A tuple containing the players in the match.
+
+        Returns:
+            str: The result of the match.
+        """
         self.win.scrollok(True)
         curses.curs_set(1)
         result = ""
@@ -70,6 +97,12 @@ class Views:
         return result
 
     def print_tournament_report(self, tournament):
+        """
+        Prints the report of a tournament.
+
+        Args:
+            tournament (Tournament): The tournament object to be reported.
+        """
         half_win = self.hei // 2
 
         self.win.clear()
@@ -96,14 +129,33 @@ class Views:
         self.win.getch()
 
     def print_round_number(self, round_num):
+        """
+        Prints the round number.
+
+        Args:
+            round_num (int): The number of the round.
+        """
         self.win.addstr(f"\nTour N°: {round_num}\n\n")
 
     def ask_save(self):
+        """
+        Asks the user whether to continue or save.
+
+        Returns:
+            bool: True if the user wants to save, False otherwise.
+        """
         self.win.addstr("Continuez (C) ou Sauveagrder (S): ")
         res = self.win.getstr().decode("utf-8").upper()
         return False if res == "C" else True
 
     def show_confirmation(self, message, time):
+        """
+        Shows a confirmation message to the user for a specified time.
+
+        Args:
+            message (str): The confirmation message to be shown.
+            time (float): The time duration to display the message.
+        """
         self.win.clear()
         w = self.wid // 2 - len(message) // 2
         h = self.hei // 2
@@ -112,6 +164,15 @@ class Views:
         sleep(time)
 
     def ask_for_confirmation(self, message):
+        """
+        Asks the user for confirmation.
+
+        Args:
+            message (str): The confirmation message to be shown.
+
+        Returns:
+            bool: True if the user confirms, False otherwise.
+        """
         self.win.clear()
         w = self.wid // 2 - len(message) // 2
         h = self.hei // 2
@@ -123,6 +184,15 @@ class Views:
         return False if res == "N" else True
 
     def show_tournament_list(self, tournament_list):
+        """
+        Shows a list of tournaments to the user and allows selection.
+
+        Args:
+            tournament_list (list): A list of Tournament objects.
+
+        Returns:
+            Tournament: The selected tournament object.
+        """
         def print_list(curr_row):
             for idx, t in enumerate(tournament_list):
                 x = self.wid // 2 - len(t.name) // 2
@@ -164,6 +234,15 @@ class Views:
         return navigate_menu(tournament_list)
 
     def show_players_list(self, players_list):
+        """
+        Shows a list of players to the user and allows selection.
+
+        Args:
+            players_list (list): A list of Player objects.
+
+        Returns:
+            Player: The selected player object.
+        """
         def print_list(curr_row):
             for idx, p in enumerate(players_list):
                 x = self.wid // 2 - len(f"{p.first_name} {p.last_name}") // 2
@@ -205,6 +284,12 @@ class Views:
         return navigate_menu(players_list)
 
     def show_player_infos(self, player):
+        """
+        Shows the information of a player to the user.
+
+        Args:
+            player (Player): The player object to display.
+        """
         self.win.clear()
         self.win.addstr(f"Prénom: {player.first_name}, Nom:{player.last_name}\n\n")
         self.win.addstr(f"Date de naissance: {player.birthday}\n\n")

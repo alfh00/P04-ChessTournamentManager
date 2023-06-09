@@ -1,7 +1,7 @@
 # P04-ChessTournamentManager
 
 This is a tournament management system implemented in Python using the curses library. The system allows users to create and manage tournaments, track players, and record match results.
-
+![alt text](https://fr.girotti.ch/media/wysiwyg/logo-smart-choice.svg)
 ## Features
 
 - Create and manage tournaments
